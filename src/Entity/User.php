@@ -11,8 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\Table(name="`user`")
- * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
  */
 class User implements UserInterface
 {
@@ -26,7 +25,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $email;
+    private $username;
 
     /**
      * @ORM\Column(type="json")
@@ -40,39 +39,10 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=50)
-     */
-    private $firstname;
-
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
-    private $lastname;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $adress;
-
-    /**
-     * @ORM\Column(type="string", length=10)
-     */
-    private $city_code;
-
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $city;
-
-    /**
-     * @ORM\Column(type="string", length=20)
-     */
-    private $phone;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Project::class, mappedBy="Users")
+     * @ORM\OneToMany(targetEntity=Project::class, mappedBy="user", orphanRemoval=true)
      */
     private $projects;
+
 
     public function __construct()
     {
@@ -84,18 +54,6 @@ class User implements UserInterface
         return $this->id;
     }
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
     /**
      * A visual identifier that represents this user.
      *
@@ -103,7 +61,14 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
     }
 
     /**
@@ -157,78 +122,6 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function getFirstname(): ?string
-    {
-        return $this->firstname;
-    }
-
-    public function setFirstname(string $firstname): self
-    {
-        $this->firstname = $firstname;
-
-        return $this;
-    }
-
-    public function getLastname(): ?string
-    {
-        return $this->lastname;
-    }
-
-    public function setLastname(string $lastname): self
-    {
-        $this->lastname = $lastname;
-
-        return $this;
-    }
-
-    public function getAdress(): ?string
-    {
-        return $this->adress;
-    }
-
-    public function setAdress(string $adress): self
-    {
-        $this->adress = $adress;
-
-        return $this;
-    }
-
-    public function getCityCode(): ?string
-    {
-        return $this->city_code;
-    }
-
-    public function setCityCode(string $city_code): self
-    {
-        $this->city_code = $city_code;
-
-        return $this;
-    }
-
-    public function getCity(): ?string
-    {
-        return $this->city;
-    }
-
-    public function setCity(string $city): self
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    public function getPhone(): ?string
-    {
-        return $this->phone;
-    }
-
-    public function setPhone(string $phone): self
-    {
-        $this->phone = $phone;
-
-        return $this;
-    }
-
     /**
      * @return Collection|Project[]
      */
@@ -241,7 +134,7 @@ class User implements UserInterface
     {
         if (!$this->projects->contains($project)) {
             $this->projects[] = $project;
-            $project->addUser($this);
+            $project->setUser($this);
         }
 
         return $this;
@@ -250,7 +143,10 @@ class User implements UserInterface
     public function removeProject(Project $project): self
     {
         if ($this->projects->removeElement($project)) {
-            $project->removeUser($this);
+            // set the owning side to null (unless already changed)
+            if ($project->getUser() === $this) {
+                $project->setUser(null);
+            }
         }
 
         return $this;

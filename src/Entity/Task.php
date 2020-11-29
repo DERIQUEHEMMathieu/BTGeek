@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\TaskRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,53 +18,44 @@ class Task
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=255)
      */
-    private $label;
+    private $title;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="string", length=255)
      */
     private $content;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="tasks")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $registered;
+    private $project;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="datetime")
      */
     private $deadline;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="datetime")
      */
-    private $active;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Project::class, mappedBy="Tasks")
-     */
-    private $Project;
-
-    public function __construct()
-    {
-        $this->Project = new ArrayCollection();
-    }
+    private $creationDate;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLabel(): ?string
+    public function getTitle(): ?string
     {
-        return $this->label;
+        return $this->title;
     }
 
-    public function setLabel(string $label): self
+    public function setTitle(string $title): self
     {
-        $this->label = $label;
+        $this->title = $title;
 
         return $this;
     }
@@ -83,14 +72,14 @@ class Task
         return $this;
     }
 
-    public function getRegistered(): ?\DateTimeInterface
+    public function getProject(): ?Project
     {
-        return $this->registered;
+        return $this->project;
     }
 
-    public function setRegistered(\DateTimeInterface $registered): self
+    public function setProject(?Project $project): self
     {
-        $this->registered = $registered;
+        $this->project = $project;
 
         return $this;
     }
@@ -100,51 +89,21 @@ class Task
         return $this->deadline;
     }
 
-    public function setDeadline(?\DateTimeInterface $deadline): self
+    public function setDeadline(\DateTimeInterface $deadline): self
     {
         $this->deadline = $deadline;
 
         return $this;
     }
 
-    public function getActive(): ?bool
+    public function getCreationDate(): ?\DateTimeInterface
     {
-        return $this->active;
+        return $this->creationDate;
     }
 
-    public function setActive(bool $active): self
+    public function setCreationDate(\DateTimeInterface $creationDate): self
     {
-        $this->active = $active;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Project[]
-     */
-    public function getProject(): Collection
-    {
-        return $this->Project;
-    }
-
-    public function addProject(Project $project): self
-    {
-        if (!$this->Project->contains($project)) {
-            $this->Project[] = $project;
-            $project->setTasks($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProject(Project $project): self
-    {
-        if ($this->Project->removeElement($project)) {
-            // set the owning side to null (unless already changed)
-            if ($project->getTasks() === $this) {
-                $project->setTasks(null);
-            }
-        }
+        $this->creationDate = $creationDate;
 
         return $this;
     }

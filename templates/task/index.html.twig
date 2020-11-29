@@ -9,11 +9,10 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Label</th>
+                <th>Title</th>
                 <th>Content</th>
-                <th>Registered</th>
                 <th>Deadline</th>
-                <th>Active</th>
+                <th>CreationDate</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -21,11 +20,10 @@
         {% for task in tasks %}
             <tr>
                 <td>{{ task.id }}</td>
-                <td>{{ task.label }}</td>
+                <td>{{ task.title }}</td>
                 <td>{{ task.content }}</td>
-                <td>{{ task.registered ? task.registered|date('Y-m-d') : '' }}</td>
-                <td>{{ task.deadline ? task.deadline|date('Y-m-d') : '' }}</td>
-                <td>{{ task.active ? 'Yes' : 'No' }}</td>
+                <td>{{ task.deadline ? task.deadline|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ task.creationDate ? task.creationDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('task_show', {'id': task.id}) }}">show</a>
                     <a href="{{ path('task_edit', {'id': task.id}) }}">edit</a>
@@ -33,7 +31,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="7">no records found</td>
+                <td colspan="6">no records found</td>
             </tr>
         {% endfor %}
         </tbody>
