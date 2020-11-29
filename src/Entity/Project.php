@@ -20,38 +20,44 @@ class Project
     private $id;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="string", length=255)
      */
-    private $opening_date;
+    private $title;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="string", length=255)
+     */
+    private $content;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $creationDate;
+
+    /**
+     * @ORM\Column(type="datetime")
      */
     private $deadline;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="projects")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $description;
+    private $user;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\OneToMany(targetEntity=Task::class, mappedBy="project", orphanRemoval=true)
      */
-    private $active;
+    private $tasks;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="projects")
+     * @ORM\Column(type="string", length=255)
      */
-    private $Users;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Task::class, inversedBy="Project")
-     */
-    private $Tasks;
+    private $status;
 
     public function __construct()
     {
-        $this->Users = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -59,14 +65,38 @@ class Project
         return $this->id;
     }
 
-    public function getOpeningDate(): ?\DateTimeInterface
+    public function getTitle(): ?string
     {
-        return $this->opening_date;
+        return $this->title;
     }
 
-    public function setOpeningDate(\DateTimeInterface $opening_date): self
+    public function setTitle(string $title): self
     {
-        $this->opening_date = $opening_date;
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->creationDate;
+    }
+
+    public function setCreationDate(\DateTimeInterface $creationDate): self
+    {
+        $this->creationDate = $creationDate;
 
         return $this;
     }
@@ -76,69 +106,63 @@ class Project
         return $this->deadline;
     }
 
-    public function setDeadline(?\DateTimeInterface $deadline): self
+    public function setDeadline(\DateTimeInterface $deadline): self
     {
         $this->deadline = $deadline;
 
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getUser(): ?User
     {
-        return $this->description;
+        return $this->user;
     }
 
-    public function setDescription(string $description): self
+    public function setUser(?User $user): self
     {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    public function getActive(): ?bool
-    {
-        return $this->active;
-    }
-
-    public function setActive(bool $active): self
-    {
-        $this->active = $active;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * @return Collection|User[]
+     * @return Collection|Task[]
      */
-    public function getUsers(): Collection
+    public function getTasks(): Collection
     {
-        return $this->Users;
+        return $this->tasks;
     }
 
-    public function addUser(User $user): self
+    public function addTask(Task $task): self
     {
-        if (!$this->Users->contains($user)) {
-            $this->Users[] = $user;
+        if (!$this->tasks->contains($task)) {
+            $this->tasks[] = $task;
+            $task->setProject($this);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): self
+    public function removeTask(Task $task): self
     {
-        $this->Users->removeElement($user);
+        if ($this->tasks->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getProject() === $this) {
+                $task->setProject(null);
+            }
+        }
 
         return $this;
     }
 
-    public function getTasks(): ?Task
+    public function getStatus(): ?string
     {
-        return $this->Tasks;
+        return $this->status;
     }
 
-    public function setTasks(?Task $Tasks): self
+    public function setStatus(string $status): self
     {
-        $this->Tasks = $Tasks;
+        $this->status = $status;
 
         return $this;
     }

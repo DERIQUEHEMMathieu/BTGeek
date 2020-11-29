@@ -2,49 +2,48 @@
 
 {% block body %}
 
-<header class="jumbotron jumbotron-fluid bg-dark m-o border-bottom p-2" style="width: 90%;">
-	<div class="row">
-		<div class="mx-5 text-white">
-			<h1 class="display-4">BTGeek</h1>
-			<p class="lead ">Construisons ensemble un avenir de parpaings</p>
-			{% if app.user %}
-				<p>Bonjour
-					{{app.user.username}}</p>
-			{% endif %}
-		</div>
-		<div class="offset-5 col-2"><img class="logo" src="{{ asset('images/ImgLogo.jpg') }}" alt="logoSynfobank"/>
-		</div>
-	</div>
-</header>
+{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+{# si l'user est connecté, il voit la navbar #}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+   <a class="navbar-brand" href="{{ path("project_index") }}">ToDoList</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-<nav
-	{# class="navbar navbar-expand-lg navbar-light text-secondary p-2 container">
-	<!-- Si un utilisateur est connecté avec le rôle de base -->
-	{% if is_granted('IS_AUTHENTICATED_FULLY') %}
-		<a class="btn btn-danger rounded-pill p-2 text-white mx-2" href="{{path('app_logout')}}">Déconnexion</a>
-	{% else %}
-		<a href="{{path('app_login')}}" class="btn btn-danger rounded-pill p-2 text-white mx-2">Connexion</a>
-		<a class="btn btn-warning rounded-pill p-2 text-dark mx-2" href="{{ path("app_register") }}">S'inscrire</a>
-	{% endif %}
-	<button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="justify-content-between" id="navbarNav">
-		<a class="btn btn-warning rounded-pill p-2 text-dark" href="{{ path("index") }}">Accueil</a> #}
-		{# <a class="nav-link text-secondary" href="{{ path("acountcreation") }}">Création de compte</a> #}
-	{# </div> #}
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{{ path("project_index") }}">Mes projets</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ path("project_new")}}">Creer un projet</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Les projets archivés</a>
+      </li>  
+    </ul>
+  </div>
+  {% endif %}
+{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+{% if app.user %}
+{# affiche le nom de la personne connectée #}
+    <p class="mx-5"> {{ app.user.username}} <p>
+{% endif %}
+    <a href="{{ path("app_logout") }}" type="button" class="btn btn-warning ">Se deconnecter</a>
+    
+{% else %}
+    <a  href="{{ path("app_login") }}" type="button" class="btn btn-primary m-3">Se connecter</a>
+    <a  href="{{ path("app_register") }}" type="button" class="btn btn-secondary m-3">S'inscrire</a>
+  
+{% endif %}
+
+
 </nav>
+<div class="container my-5">
 
-<main class="container">
-	{% block main %}{% endblock %}
-</main>
+{% block main %}
 
-<footer class=" pt-4 pt-md-5 border-top bg-dark text-white">
-		<div class="row">
-			<div class="col-12 col-md">
-				<p class="d-block text-center">&copy; BTGeek - November 2020</p>
-                <p class="d-block text-center"> Application product by Mathieu D</p>
-			</div>
-		</div>
-	</footer>
+{% endblock %}
+<div>
+
 {% endblock %}

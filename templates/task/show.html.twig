@@ -12,24 +12,20 @@
                 <td>{{ task.id }}</td>
             </tr>
             <tr>
-                <th>Label</th>
-                <td>{{ task.label }}</td>
+                <th>Title</th>
+                <td>{{ task.title }}</td>
             </tr>
             <tr>
                 <th>Content</th>
                 <td>{{ task.content }}</td>
             </tr>
             <tr>
-                <th>Registered</th>
-                <td>{{ task.registered ? task.registered|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
                 <th>Deadline</th>
-                <td>{{ task.deadline ? task.deadline|date('Y-m-d') : '' }}</td>
+                <td>{{ task.deadline ? task.deadline|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>Active</th>
-                <td>{{ task.active ? 'Yes' : 'No' }}</td>
+                <th>CreationDate</th>
+                <td>{{ task.creationDate ? task.creationDate|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
         </tbody>
     </table>
