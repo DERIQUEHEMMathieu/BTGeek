@@ -8,7 +8,7 @@
 </header>
 
 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-info text-dark">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -29,7 +29,7 @@
 {% endif %}
 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
   {% if app.user %}
-    <p class="mx-5"> {{ app.user.username}} <p>
+    <p class="mx-5">Bienvenue {{ app.user.username}} <p>
   {% endif %}
     <a href="{{ path("app_logout") }}" type="button" class="btn btn-warning ">Déconnection</a>
   {% else %}
