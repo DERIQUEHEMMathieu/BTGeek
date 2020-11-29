@@ -23,9 +23,7 @@
                 </div>
 
         {% else %}
-
-               <p>Aucun projet à montrer </p>
-
+            <p>Aucun projet à montrer </p>
         {% endfor %}
-    <a href="{{ path('project_new') }}" class="btn btn-primary">Create new</a>
+    <a href="{{ path('project_new') }}" class="btn btn-success font-weight-bold text-dark">Nouveau projet</a>
 {% endblock %}

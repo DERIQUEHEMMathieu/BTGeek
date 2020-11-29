@@ -1,40 +1,33 @@
 {% extends 'template.html.twig' %}
 
-{% block title %}Mon projet{% endblock %}
+{% block title %}{{ project.title }}{% endblock %}
 
 {% block main %}
 
-<a class="btn btn-secondary" href="{{ path('project_index') }}"> Revenir à la liste des projets</a>
+<a class="btn btn-warning font-weight-bold" href="{{ path('project_index') }}">Mes projets</a>
     <h1 class="text-center m-3 display-4">{{ project.title }}</h1>
         <div class="jumbotron bg-light">
-            <h1 class="display-3">{{ project.content }}</h1>
-            <p class="lead">Créé le {{ project.creationDate ? project.creationDate|date('Y-m-d H:i:s') : '' }}</p>
-             <p class="lead text-warning">A finir avant le {{ project.deadline ? project.deadline|date('Y-m-d H:i:s') : '' }}</p>
+            <h1 class="display-3 text-center">{{ project.content }}</h1>
+            <p class="lead">Créé le : {{ project.creationDate ? project.creationDate|date('d-m-Y H:i:s') : '' }}</p>
+             <p class="lead text-warning font-weight-bold">Projet à finir avant le : {{ project.deadline ? project.deadline|date('d-m-Y H:i:s') : '' }}</p>
             <div class="lead">
-             {% for task in tasks %}
-                <div class="card my-4">
-                    <div class="card-header">
-                    {{ task.title }}
+                {% for task in tasks %}
+                    <div class="card my-4 text-dark">
+                        <div class="card-header font-weight-bold">
+                            {{ task.title }}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ task.content }}</h5>
+                            <p class="card-text"><p class="float-right font-weight-bold text-warning mx-2"> Tâche à finir avant le : {{ task.deadline | date("d/m/Y")}} à {{ task.deadline | date('H:i') }} </p></p>
+                            {{ include('task/_delete_form.html.twig') }}
+                        </div>
                     </div>
-                    <div class="card-body">
-                    <h5 class="card-title">{{ task.content }}</h5>
-                    <p class="card-text"><p class="float-right text-warning mx-2"> A finir avant : {{ task.deadline | date("m/d/Y")}} à {{ task.deadline | date('H:i') }} </p></p>
-                     {{ include('task/_delete_form.html.twig') }}
-                    </div>
-                </div>
-                <hr>
-             {% endfor %}
-            
-            
+                {% endfor %}
             </div>
-
             <p class="lead">
-            <a class="btn btn-primary btn-lg" href="{{ path('task_new', {'id': project.id}) }}" role="button">Ajouter tache</a>
+            <a class="btn btn-success font-weight-bold" href="{{ path('task_new', {'id': project.id}) }}" role="button">Ajouter tâche</a>
             </p>
-            <a class="btn btn-secondary" href="{{ path('project_edit', {'id': project.id}) }}">Modifier</a>
+            <a class="btn btn-warning font-weight-bold" href="{{ path('project_edit', {'id': project.id}) }}">Modifier</a>
               {{ include('project/_delete_form.html.twig') }}
         </div>
-
-
-  
 {% endblock %}
