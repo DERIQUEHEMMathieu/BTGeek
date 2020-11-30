@@ -2,13 +2,14 @@
 
 {% block body %}
 
-<header class="text-center">
+<header class="text-center bg-info text-white py-4">
   <h1> BTGeek</h1>
   <p> Construisons ensemble un monde de parpaings</p>
+  <p id="date"></p>
 </header>
 
 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-info text-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-white">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -31,15 +32,18 @@
   {% if app.user %}
     <p class="mx-5">Bienvenue {{ app.user.username}} <p>
   {% endif %}
-    <a href="{{ path("app_logout") }}" type="button" class="btn btn-warning ">Déconnection</a>
+    <a href="{{ path("app_logout") }}" type="button" class="btn btn-danger ">Déconnection</a>
   {% else %}
     <a  href="{{ path("app_login") }}" type="button" class="btn btn-success m-3">Connection</a>
     <a  href="{{ path("app_register") }}" type="button" class="btn btn-warning m-3">S'inscrire</a>
 {% endif %}
 </nav>
+
 <div class="container my-5">
 {% block main %}{% endblock %}
+</div>
 
-<footer class="text-center">
+<footer class="text-center bg-info text-white py-4 mt-5" style="width: 100%;">
   <p>&copy; BTGeek by Mathieu - November 2020</p>
+</footer>
 {% endblock %}
