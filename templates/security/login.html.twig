@@ -3,7 +3,7 @@
 {% block title %}Connexion{% endblock %}
 
 {% block main %}
-<form method="post">
+<form class="text-center" method="post">
     {% if error %}
         <div class="alert alert-warning">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
@@ -16,15 +16,15 @@
 
     <h2 class="h3 mb-3 font-weight-normal">Connectez-vous</h2>
     <label for="inputUsername">Nom d'utilisateur :</label>
-    <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control w-25" required autofocus>
-    <label for="inputPassword">Mot de passe :</label>
-    <input type="password" name="password" id="inputPassword" class="form-control w-25" required>
+    <input class="text-center" type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control w-25" required autofocus>
+    <label class="ml-3" for="inputPassword">Mot de passe :</label>
+    <input class="text-center" type="password" name="password" id="inputPassword" class="form-control w-25" required>
 
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
     >
 
-    <button class="btn btn-primary my-4" type="submit">
+    <button class="btn btn-primary mx-3 my-4" type="submit">
         Se connecter
     </button>
 </form>
